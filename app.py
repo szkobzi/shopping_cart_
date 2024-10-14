@@ -60,11 +60,49 @@ def app():
 
         
     elif option == "3":
+        if kosar:
+            valtoztatando_termek = int(input("Kérlek add meg a változtatni kívánt termék sorszámát: "))
+            if 1 <= valtoztatando_termek <= len(kosar):
+                valtoztatott_termek = kosar[valtoztatando_termek - 1]
+                typewrite(f"Kiválasztott termék: {['termek']}, Ár: {valtoztatott_termek['ar']} Ft")
+
+                termek_valtoztatas = str(input("Szeretnéd módosítani a termék nevét? (nyomj entert, ha nem!) "))
+                ar_valtoztatas = str(input("Szeretnéd változtatni a termék árát? (nyomj entert, ha nem!) "))
+                
+                if termek_valtoztatas.strip():
+                    kosar[valtoztatando_termek - 1]['termek'] = termek_valtoztatas
+
+                if ar_valtoztatas.strip():
+                    try: 
+                        kosar[valtoztatando_termek - 1]['ar'] = int(ar_valtoztatas)
+                    except ValueError:
+                        typewrite("Érvénytelen ár, az ár módosítása elmarad!")
+                
+                mentes()
+                typewrite(f"A(z) {kosar[valtoztatando_termek - 1]['termek']} sikeresen módosítva!")
+            else:
+                typewrite("Érvénytelen sorszám!")
+         
+            typewrite("Frisített kosár tartalom:")
+            for index, item in enumerate(kosar):
+                typewrite(f"{index + 1}. Termék: {item['termek']}, Ár: {item['ar']} Ft")
+        else:
+            typewrite("Nincs mit módosítani, a kosár üres!")
+        
+        
         app()
-        pass
+        
     elif option == "4":
+        torles = input("Biztosan törölni akarod az egész kosarad? (y/n): ")
+        if torles == 'y':
+            typewrite("Sikeresen törölted a kosaradat! ")
+            with open(kosar.json, 'w') as json_file:
+                json.dump({}, json_file)
+        elif torles == 'n':
+            pass
+        else:
+            typewrite("Igen (y) vagy Nem (n) közül választhatsz! ")
         app()
-        pass
     elif option == "5":
         if kosar:
             typewrite("A kosár tartalma:")
