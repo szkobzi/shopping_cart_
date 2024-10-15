@@ -21,7 +21,7 @@ def typewrite(text):
     for character in text:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.014)
+        time.sleep(0.008)
     print("")
 
 def parancsok():
@@ -50,7 +50,7 @@ typewrite(" ×    6. Parancsok megtekintése")
 typewrite(" ×    7. Kilépés az alkalmazásból")
 
 def app():
-
+    global kosar
     option = str(input("Kérlek válassz egy opciót! (1,2,3,4,5,6,7) "))
 
     if option == "1":
@@ -113,7 +113,8 @@ def app():
         if torles == 'y':
             typewrite("Sikeresen törölted a kosaradat! ")
             with open('kosar.json', 'w') as file:
-                json.dump({}, file, indent=4, ensure_ascii=False)
+                json.dump([], file)
+                kosar = []
         elif torles == 'n':
             pass
         else:
@@ -124,10 +125,10 @@ def app():
             typewrite("A kosár tartalma:")
             for index, item in enumerate(kosar):
                 typewrite(f"{index + 1} {item['termek']}, Ár: {item['ar']} Ft")
-                app()
         else:
             typewrite("A kosár üres!")
             app()
+        app()
     elif option == "6":
         parancsok()
         app()
@@ -138,6 +139,6 @@ def app():
         time.sleep(1)
         sys.exit()
     else:
-        typewrite("Kérlek válassz egy valid opciót")
+        typewrite("Kérlek válassz egy valid opciót! ")
         app()
 app()
