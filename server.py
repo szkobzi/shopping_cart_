@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
+import json
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Bevásárló kocsi app"
+    return render_template("templates/index.html")
 
 app.run(host="0.0.0.0", port=80)
