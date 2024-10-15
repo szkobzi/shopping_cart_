@@ -85,7 +85,8 @@
             {{ termek['termek'] }} - {{ termek['ar'] }} Ft
             <div>
                 <button onclick="openModal({{ loop.index0 }}, '{{ termek['termek'] }}', {{ termek['ar'] }})">Módosítás</button>
-                <a href="{{ url_for('torol_termek', index=loop.index0) }}" style="color: red;">Törlés</a>
+                <button onclick="{{ url_for('torol_termek', index=loop.index0) }}" style="background-color: red; color: white;">Törlés</button>
+
             </div>
         </li>
         {% endfor %}
