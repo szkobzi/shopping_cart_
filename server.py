@@ -6,12 +6,12 @@ app = Flask(__name__)
 
 def betolt_kosar():
     if os.path.exists('kosar.json'):
-        with open('kosar.json', 'r') as file:
+        with open('kosar.json', 'r', encoding='utf-8') as file:
             return json.load(file)
     return []
 
 def mentes_kosar(kosar):
-    with open('kosar.json', 'w') as file:
+    with open('kosar.json', 'w', encoding="utf-8") as file:
         json.dump(kosar, file, indent=4, ensure_ascii=False)
 
 @app.route('/')

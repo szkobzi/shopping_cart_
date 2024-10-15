@@ -30,7 +30,7 @@
             align-items: center;
         }
         button {
-            background-color: #007bff;
+            background-color: #0c7829;
             color: white;
             border: none;
             padding: 5px 10px;
@@ -38,7 +38,7 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #05572e;
         }
         .modal {
             display: none;
@@ -52,7 +52,14 @@
             background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
             padding-top: 60px;
+            animation: fadeIn 0.5s;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto;
@@ -61,6 +68,30 @@
             width: 80%;
             max-width: 500px;
             border-radius: 5px;
+            animation: zoomIn 0.5s;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); }
+            to { transform: scale(1); }
+        }
+
+        .modal-hide {
+            animation: fadeOut 0.5s;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .modal-hide .modal-content {
+            animation: zoomOut 0.5s;
+        }
+
+        @keyframes zoomOut {
+            from { transform: scale(1); }
+            to { transform: scale(0.5); }
         }
         .close {
             color: #aaa;
@@ -74,6 +105,19 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+                
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        label {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -85,23 +129,34 @@
             {{ termek['termek'] }} - {{ termek['ar'] }} Ft
             <div>
                 <button onclick="openModal({{ loop.index0 }}, '{{ termek['termek'] }}', {{ termek['ar'] }})">Módosítás</button>
-                <button onclick="{{ url_for('torol_termek', index=loop.index0) }}" style="background-color: red; color: white;">Törlés</button>
+                <button onclick="torolTermek({{ loop.index0 }})" style="background-color: red; color: white;">Törlés</button>
 
             </div>
         </li>
         {% endfor %}
     </ul>
 
-    <h2>Termék hozzáadása</h2>
-    <form action="{{ url_for('hozzaad_termek') }}" method="POST">
-        <input type="text" name="termek" placeholder="Termék neve" required>
-        <input type="number" name="ar" placeholder="Ár" required>
-        <button type="submit">Hozzáadás</button>
-    </form>
-
+<div style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <button onclick="openAddModal()">Termék hozzáadása</button>
     <form action="{{ url_for('torol_kosar') }}" method="POST">
-        <button type="submit" style="background-color: red; color: white;">Kosár törlése</button>
+        <button type="submit" style="margin-left: 20px; background-color: red; color: white;">Kosár törlése</button>
     </form>
+</div>
+
+<!-- Termék hozzáadása modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Termék hozzáadása</h2>
+        <form id="addForm" action="{{ url_for('hozzaad_termek') }}" method="POST">
+            <label for="termekNev">Termék neve:</label>
+            <input type="text" id="termekNev" name="termek" placeholder="Termék neve" required><br><br>
+            <label for="termekAr">Termék ára:</label>
+            <input type="number" id="termekAr" name="ar" placeholder="Ár" required><br><br>
+            <button type="submit">Hozzáadás</button>
+        </form>
+    </div>
+</div>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
@@ -117,6 +172,19 @@
     </div>
 
     <script>
+        function torolTermek(index) {
+            if (confirm("Biztosan törölni szeretnéd a terméket?")) {
+                window.location.href = '/torol/' + index;
+            }
+        }
+
+        function openAddModal() {
+            document.getElementById("addModal").style.display = "block";
+            document.getElementById("addModal").classList.remove("modal-hide");
+            document.getElementById("termekNev").value = "";
+            document.getElementById("termekAr").value = "";
+        }
+
         function openModal(index, termekNev, termekAr) {
             document.getElementById("termek_index").value = index;
             document.getElementById("uj_termek_nev").value = termekNev;
@@ -126,7 +194,11 @@
         }
 
         function closeModal() {
-            document.getElementById("myModal").style.display = "none";
+            document.getElementById("myModal").classList.add("modal-hide");
+            setTimeout(function() {
+                document.getElementById("myModal").style.display = "none";
+                document.getElementById("myModal").classList.remove("modal-hide");
+            }, 500);
         }
 
         window.onclick = function(event) {
