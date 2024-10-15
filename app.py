@@ -2,6 +2,8 @@ import sys
 import os
 import time
 import json
+from colorama import Fore, Back, Style
+
 
 kosar = []
 
@@ -22,8 +24,21 @@ def typewrite(text):
         time.sleep(0.014)
     print("")
 
+def parancsok():
+    typewrite("--------------------------------------------")
+    typewrite(" ×    1. Elem hozzáadása a kosárhoz")
+    typewrite(" ×    2. Elem törlése a kosárból")
+    typewrite(" ×    3. Elem módosítása")
+    typewrite(" ×    4. Kosár tartalmának törlése")
+    typewrite(" ×    5. Kosár megtekintése")
+    typewrite(" ×    6. Parancsok megtekintése")
+    typewrite(" ×    7. Kilépés az alkalmazásból")
+    typewrite("--------------------------------------------")
 
-typewrite("\n\n     👋   Üdvözöllek az alkalmazásban!\n")
+
+
+
+typewrite(f"\n\n     👋   Üdvözöllek az alkalmazásban!\n")
 typewrite("Az az alkalmazásban 4 féle művelet közül választhatsz, amik a kövezketőek:")
 typewrite("--------------------------------------------")
 typewrite(" ×    1. Elem hozzáadása a kosárhoz")
@@ -31,11 +46,12 @@ typewrite(" ×    2. Elem törlése a kosárból")
 typewrite(" ×    3. Elem módosítása")
 typewrite(" ×    4. Kosár tartalmának törlése")
 typewrite(" ×    5. Kosár megtekintése")
-typewrite(" ×    6. Kilépés az alkalmazásból")
+typewrite(" ×    6. Parancsok megtekintése")
+typewrite(" ×    7. Kilépés az alkalmazásból")
 
 def app():
 
-    option = str(input("Kérlek válassz egy opciót! (1,2,3,4,5,6) "))
+    option = str(input("Kérlek válassz egy opciót! (1,2,3,4,5,6,7) "))
 
     if option == "1":
         termek = str(input("Add meg az első terméket amit a kosárhoz akarsz adni! "))
@@ -48,7 +64,7 @@ def app():
             torlendo_termek = int(input("Add meg a törölni kívánt termék sorszámát: "))
             if 1 <= torlendo_termek <= len(kosar):
                 torolt_termek = kosar.pop(torlendo_termek - 1)
-                typewrite(f"{torlendo_termek} sikeresen törölve lett a kosaradból.")
+                typewrite(f"{torolt_termek['termek']} sikeresen törölve lett a kosaradból.")
                 mentes()
                 app()
             else: 
@@ -64,7 +80,7 @@ def app():
             valtoztatando_termek = int(input("Kérlek add meg a változtatni kívánt termék sorszámát: "))
             if 1 <= valtoztatando_termek <= len(kosar):
                 valtoztatott_termek = kosar[valtoztatando_termek - 1]
-                typewrite(f"Kiválasztott termék: {['termek']}, Ár: {valtoztatott_termek['ar']} Ft")
+                typewrite(f"Kiválasztott termék: {valtoztatott_termek['termek']}, Ár: {valtoztatott_termek['ar']} Ft")
 
                 termek_valtoztatas = str(input("Szeretnéd módosítani a termék nevét? (nyomj entert, ha nem!) "))
                 ar_valtoztatas = str(input("Szeretnéd változtatni a termék árát? (nyomj entert, ha nem!) "))
@@ -96,8 +112,8 @@ def app():
         torles = input("Biztosan törölni akarod az egész kosarad? (y/n): ")
         if torles == 'y':
             typewrite("Sikeresen törölted a kosaradat! ")
-            with open(kosar.json, 'w') as json_file:
-                json.dump({}, json_file)
+            with open('kosar.json', 'w') as file:
+                json.dump({}, file, indent=4, ensure_ascii=False)
         elif torles == 'n':
             pass
         else:
@@ -113,9 +129,12 @@ def app():
             typewrite("A kosár üres!")
             app()
     elif option == "6":
+        parancsok()
+        app()
+    elif option == "7":
         typewrite("\n\n👋 Viszontlátásra!\n")
         time.sleep(0.02)
-        typewrite("🪢  Leállítás... \n\n")
+        typewrite(f"{Fore.RED}🪢  Leállítás... \n\n")
         time.sleep(1)
         sys.exit()
     else:
