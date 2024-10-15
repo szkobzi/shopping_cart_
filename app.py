@@ -139,6 +139,6 @@ def app():
         time.sleep(1)
         sys.exit()
     else:
-        typewrite("Kérlek válassz egy valid opciót! ")
+        typewrite("Kérlek válassz egy valid opciót!\nAmennyiben elakadtál használd a 6. választási lehetőséget")
         app()
 app()
